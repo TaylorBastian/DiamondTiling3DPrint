@@ -1,11 +1,13 @@
 /*******************************************************          
-* Name: DiamondApp                                     *   
+* Name: DiamondApp                                     *
+* Date: Summer 2016                                    *
 *                                                      *   
 * Author: Bastian, Taylor                              *   
 *                                                      *   
 * Purpose:  Demonstration of 3d Diamond Tiling         *
 *                                                      *                                                                                               
 *******************************************************/
+
 package application;
 
 public class Util {
@@ -54,11 +56,11 @@ public class Util {
 							} // for j
 						} // for i
 					} // for t
-					this.data+=("~\n");
 				} // for k2
 			} // for k1
+			//Add color change to string
+			this.data+=("~\n");
 		} // for thyme
-		System.out.println("DataGeneration complete");
 	}
 
 	public String getData() {

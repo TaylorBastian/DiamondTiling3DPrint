@@ -88,6 +88,7 @@ public class DiamondApp extends Application {
 	private Integer[] colorLine;
 	private String fileLocation = "src/test_file.txt";
 	private Sphere sphere;
+	private int colorOnly = 0;
 	private double xSpacing = 0;
 	private double ySpacing = 0;
 	private double zSpacing = 0;
@@ -110,7 +111,6 @@ public class DiamondApp extends Application {
 		camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
 		cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
 		cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
-		System.out.println("buildCamera() Complete");
 	}
 
 	private void handleMouse(SubScene scene, final Node root) {
@@ -123,6 +123,7 @@ public class DiamondApp extends Application {
 				mouseOldY = me.getSceneY();
 			}
 		});
+
 		scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent me) {
@@ -156,9 +157,11 @@ public class DiamondApp extends Application {
 				}
 			}
 		});
+
 	}
 
 	private void handleKeyboard(SubScene scene, final Node root) {
+
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -181,18 +184,21 @@ public class DiamondApp extends Application {
 				}
 			}
 		});
+
 	}
 
 	private void buildDiamond() throws IOException {
 		if (getData()) {
-
+			// Create Xform
 			Xform diamondXform = new Xform();
 			Xform sphereXform = new Xform();
 
+			// Clear data
 			diamondXform.getChildren().clear();
 			sphereXform.getChildren().clear();
 			diamondGroup.getChildren().clear();
 
+			// Initialize all color Classes
 			PhongMaterial material = new PhongMaterial();
 
 			final PhongMaterial blackMaterial = new PhongMaterial();
@@ -228,17 +234,22 @@ public class DiamondApp extends Application {
 			purpleMaterial.setSpecularColor(Color.MEDIUMPURPLE);
 			int b = 0;
 			int n = 0;
+
+			// Check if data is correct
 			if (yCord.length == xCord.length && yCord.length == zCord.length) {
+
+				// loop through data
 				for (int i = 0; i < xCord.length; i++) {
 					sphereXform = new Xform();
 					sphere = new Sphere(nodeSize);
 					sphere.setTranslateX(
-							xSpacing*10* (Double.parseDouble(yCord[i]) - ((util.getUpper_bound_j() / 2)) - 1));
+							xSpacing * 10 * (Double.parseDouble(yCord[i]) - ((util.getUpper_bound_j() / 2)) - 1));
 					sphere.setTranslateY(
-							zSpacing*10* (Double.parseDouble(xCord[i]) - ((util.getUpper_bound_T() / 2)) - 1));
+							zSpacing * 10 * (Double.parseDouble(xCord[i]) - ((util.getUpper_bound_T() / 2)) - 1));
 					sphere.setTranslateZ(
-							ySpacing*10* (Double.parseDouble(zCord[i]) - ((util.getUpper_bound_i() / 2)) - 1));
+							ySpacing * 10 * (Double.parseDouble(zCord[i]) - ((util.getUpper_bound_i() / 2)) - 1));
 
+					// change color displayed
 					if (colorLine[b] == i) {
 						switch (n) {
 						case (0):
@@ -279,8 +290,62 @@ public class DiamondApp extends Application {
 						}
 						b++;
 					}
-					sphere.setMaterial(material);
-					sphereXform.getChildren().add(sphere);
+					// Add data to parents
+					
+					
+					//Check if only one color will be displayed 
+					if (colorOnly == 0) {
+						sphere.setMaterial(material);
+						sphereXform.getChildren().add(sphere);
+					}
+					if (colorOnly == 1){
+						if(material==blackMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 2){
+						if(material==whiteMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 3){
+						if(material==blueMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 4){
+						if(material==redMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 5){
+						if(material==orangeMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 6){
+						if(material==yellowMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 7){
+						if(material==greenMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
+					if (colorOnly == 8){
+						if(material==purpleMaterial){
+							sphere.setMaterial(material);
+							sphereXform.getChildren().add(sphere);
+						}
+					}
 					diamondXform.getChildren().add(sphereXform);
 				}
 
@@ -289,14 +354,16 @@ public class DiamondApp extends Application {
 			}
 			diamondGroup.getChildren().add(diamondXform);
 			world.getChildren().add(diamondGroup);
-			System.out.println("buildDiamond() complete");
 		}
-
 	}
 
 	private boolean getData() {
+
+		// Initialize data
 		String input = "";
 		String[] parts;
+
+		// Check if file location is et
 		if (this.fileLocation != null) {
 			BufferedReader br = null;
 			try {
@@ -321,12 +388,16 @@ public class DiamondApp extends Application {
 
 			// String builder to string
 			input = sb.toString();
+
+			// If no file generate data
 		} else {
 			util.generateData();
 			input = util.getData();
 		}
-		// Split at space
+		// Split at ~
 		String[] tokens = input.split("[~]+");
+
+		// Initialize data
 		int j = 0;
 		int b = 0;
 		int x;
@@ -335,16 +406,20 @@ public class DiamondApp extends Application {
 		boolean buffer = true;
 		int dataPoints = 0;
 		int colorPoints = 0;
+
+		// Loop through data
 		for (int i = 0; i < tokens.length; i++) {
 			// check if empty
 			if (!tokens[i].isEmpty() || tokens[i] != null) {
 				// Check if white Space
 				if (tokens[i].length() > 1) {
+					// Add a data point
 					tokens[i].replaceAll("\\s+", "");
 					tokens[i].replace("\n", "").replace("\r", "");
 					tokens[i] = tokens[i].substring(0, tokens[i].length() - 1);
 					dataPoints++;
 				} else {
+					// add a color point
 					tokens[i] = "~";
 					tokens[i].replaceAll("\\s+", "");
 					colorPoints++;
@@ -352,10 +427,13 @@ public class DiamondApp extends Application {
 
 			}
 		}
+		// Set array lengths based on datapoints and colorpoints
 		colorLine = new Integer[colorPoints];
 		yCord = new String[dataPoints];
 		xCord = new String[dataPoints];
 		zCord = new String[dataPoints];
+
+		// loop through data
 		for (int i = 0; i < tokens.length; i++) {
 			// check if empty
 			if (!tokens[i].isEmpty() || tokens[i] != null) {
@@ -365,6 +443,8 @@ public class DiamondApp extends Application {
 					parts = tokens[i].split(",");
 					// assign new value based on file
 					try {
+
+						// assign data
 						x = Integer.parseInt(parts[0]);
 						y = Integer.parseInt(parts[1]);
 						z = Integer.parseInt(parts[2]);
@@ -372,13 +452,10 @@ public class DiamondApp extends Application {
 						xCord[j] = Integer.toString(x);
 						yCord[j] = Integer.toString(y);
 						zCord[j] = Integer.toString(z);
-						System.out.print(j + ":");
-						System.out.print(Integer.toString(x) + " ");
-						System.out.print(Integer.toString(y) + " ");
-						System.out.println(Integer.toString(z));
-
 						j++;
 						buffer = true;
+
+						// catch errors in data
 					} catch (ArrayIndexOutOfBoundsException e) {
 						errorText.setText("Data is wrong 1: \n Check file");
 						e.printStackTrace();
@@ -392,21 +469,24 @@ public class DiamondApp extends Application {
 						e.printStackTrace();
 						return false;
 					}
+					// if not true add colorpoint
 				} else {
+					// check buffer
 					if (buffer) {
+
+						// add color point
 						colorLine[b] = j;
-						System.out.println(j + ": colorchange " + b);
 						b++;
 						buffer = false;
 					}
 				}
 			}
 		}
-		System.out.println("getData() Complete");
 		return true;
 	}
 
 	private void buildGUI() {
+		// create file chooser
 		FileChooser browser = new FileChooser();
 		browser.setTitle("Pick Data File");
 
@@ -416,6 +496,7 @@ public class DiamondApp extends Application {
 
 		// Create Text
 		Text filePath = new Text();
+		Text colorToDisplay = new Text("Color to diaply");
 		Text textBrowser = new Text("Browse for txt file");
 		Text xsText = new Text("Spacing x");
 		Text ysText = new Text("Spacing y");
@@ -449,10 +530,17 @@ public class DiamondApp extends Application {
 		tField.setText("10");
 		tauField.setText("12");
 		errorText.setFill(Color.RED);
+
 		// Create Choice Box
 		ChoiceBox<String> cb = new ChoiceBox<String>(FXCollections.observableArrayList("Generate", "From File"));
+		ChoiceBox<String> cb1 = new ChoiceBox<String>(FXCollections.observableArrayList("All", "Black", "White", "Blue",
+				"Red", "Orange", "Yellow", "Green", "Purple"));
 
 		// Hide unused elements
+		colorToDisplay.setVisible(false);
+		colorToDisplay.setManaged(false);
+		cb1.setVisible(false);
+		cb1.setManaged(false);
 		xsText.setVisible(false);
 		xsText.setManaged(false);
 		ysText.setVisible(false);
@@ -477,7 +565,6 @@ public class DiamondApp extends Application {
 		yField.setManaged(false);
 		tField.setVisible(false);
 		tField.setManaged(false);
-
 		textTau.setVisible(false);
 		textTau.setManaged(false);
 		textX.setVisible(false);
@@ -486,7 +573,6 @@ public class DiamondApp extends Application {
 		textY.setManaged(false);
 		textT.setVisible(false);
 		textT.setManaged(false);
-
 		btnB.setVisible(false);
 		btnB.setManaged(false);
 		text.setVisible(false);
@@ -504,7 +590,13 @@ public class DiamondApp extends Application {
 
 				// If Generate selected
 				if (newValue.intValue() == 0) {
+					// file location to null
 					fileLocation = null;
+					// set visible elements
+					colorToDisplay.setVisible(true);
+					colorToDisplay.setManaged(true);
+					cb1.setVisible(true);
+					cb1.setManaged(true);
 					xsText.setVisible(true);
 					xsText.setManaged(true);
 					ysText.setVisible(true);
@@ -525,7 +617,6 @@ public class DiamondApp extends Application {
 					zsField.setManaged(true);
 					xsField.setVisible(true);
 					xsField.setManaged(true);
-
 					textTau.setVisible(true);
 					textTau.setManaged(true);
 					textX.setVisible(true);
@@ -535,26 +626,28 @@ public class DiamondApp extends Application {
 					textT.setVisible(true);
 					textT.setManaged(true);
 
+					// set non-visble elements
 					textBrowser.setVisible(false);
 					textBrowser.setManaged(false);
-
 					filePath.setVisible(false);
 					filePath.setManaged(false);
-
 					btnB.setVisible(false);
 					btnB.setManaged(false);
-
 					text.setVisible(true);
 					text.setManaged(true);
-
 					numberField.setVisible(true);
 					numberField.setManaged(true);
-
 					btn.setVisible(true);
 					btn.setManaged(true);
 				}
 				// If From File selected
 				if (newValue.intValue() == 1) {
+
+					// set non visible elements
+					colorToDisplay.setVisible(false);
+					colorToDisplay.setManaged(false);
+					cb1.setVisible(false);
+					cb1.setManaged(false);
 					xsText.setVisible(false);
 					xsText.setManaged(false);
 					ysText.setVisible(false);
@@ -577,7 +670,6 @@ public class DiamondApp extends Application {
 					yField.setManaged(false);
 					tField.setVisible(false);
 					tField.setManaged(false);
-
 					ysField.setVisible(false);
 					ysField.setManaged(false);
 					zsField.setVisible(false);
@@ -585,25 +677,55 @@ public class DiamondApp extends Application {
 					xsField.setVisible(false);
 					xsField.setManaged(false);
 
+					// set elements visible
 					filePath.setVisible(true);
 					filePath.setManaged(true);
-
 					textBrowser.setVisible(true);
 					textBrowser.setManaged(true);
-
 					text.setVisible(true);
 					text.setManaged(true);
-
 					btnB.setVisible(true);
 					btnB.setManaged(true);
-
 					numberField.setVisible(true);
 					numberField.setManaged(true);
-
 					btn.setVisible(true);
 					btn.setManaged(true);
 				}
 			}
+		});
+		cb1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				if (newValue.intValue() == 0) {
+					colorOnly=0;
+				}
+				if (newValue.intValue() == 1) {
+					colorOnly=1;
+				}
+				if (newValue.intValue() == 2) {
+					colorOnly=2;
+				}
+				if (newValue.intValue() == 3) {
+					colorOnly=3;
+				}
+				if (newValue.intValue() == 4) {
+					colorOnly=4;
+				}
+				if (newValue.intValue() == 5) {
+					colorOnly=5;
+				}
+				if (newValue.intValue() == 6) {
+					colorOnly=6;
+				}
+				if (newValue.intValue() == 7) {
+					colorOnly=7;
+				}
+				if (newValue.intValue() == 8) {
+					colorOnly=8;
+				}
+
+			}
+
 		});
 
 		browser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("txt", "*.txt"));
@@ -614,25 +736,35 @@ public class DiamondApp extends Application {
 			public void handle(ActionEvent event) {
 
 				try {
+					// clear error text
 					errorText.setText("");
-					xSpacing= Integer.parseInt(xsField.getText());
-					ySpacing= Integer.parseInt(ysField.getText());
-					zSpacing= Integer.parseInt(zsField.getText());
+
+					// set data spacing
+					xSpacing = Integer.parseInt(xsField.getText());
+					ySpacing = Integer.parseInt(ysField.getText());
+					zSpacing = Integer.parseInt(zsField.getText());
+
+					// set node size
 					nodeSize = Integer.parseInt(numberField.getText());
+
+					// set data inputs
 					util.setTau(Integer.parseInt(tauField.getText()));
 					util.setUpper_bound_i(Integer.parseInt(xField.getText()));
 					util.setUpper_bound_j(Integer.parseInt(yField.getText()));
 					util.setUpper_bound_T(Integer.parseInt(tField.getText()));
+
+					// clear data
 					rootR.getChildren().clear();
 					world.getChildren().clear();
 					buildAxes();
 					buildCamera();
+					// add data to parent
+					rootR.getChildren().add(world);
 					try {
 						buildDiamond();
 					} catch (IOException e) {
 						errorText.setText("Data is wrong: Check file");
 					}
-					rootR.getChildren().add(world);
 				} catch (NullPointerException e) {
 					errorText.setText("Make sure you input all \n settings");
 				} catch (NumberFormatException e) {
@@ -642,33 +774,37 @@ public class DiamondApp extends Application {
 			}
 		});
 
+		// handle browser button event
 		btnB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				// open file browser
 				File file = browser.showOpenDialog(stage);
 				if (null != file) {
+					// read from file
 					fileLocation = file.getPath();
 					filePath.setText(fileLocation);
 				}
 			}
 		});
+		// add children to parents
 		rootG.getChildren().add(title);
 		rootG.getChildren().add(data);
 		rootG.getChildren().add(cb);
 
 		rootG.getChildren().add(textTau);
 		rootG.getChildren().add(tauField);
-		
+
 		rootG.getChildren().add(textX);
 		rootG.getChildren().add(xField);
 		rootG.getChildren().add(xsText);
 		rootG.getChildren().add(xsField);
-		
+
 		rootG.getChildren().add(textY);
 		rootG.getChildren().add(yField);
 		rootG.getChildren().add(ysText);
 		rootG.getChildren().add(ysField);
-		
+
 		rootG.getChildren().add(textT);
 		rootG.getChildren().add(tField);
 		rootG.getChildren().add(zsText);
@@ -679,14 +815,16 @@ public class DiamondApp extends Application {
 		rootG.getChildren().add(btnB);
 		rootG.getChildren().add(text);
 		rootG.getChildren().add(numberField);
+		rootG.getChildren().add(colorToDisplay);
+		rootG.getChildren().add(cb1);
 		rootG.getChildren().add(btn);
 		rootG.getChildren().add(errorText);
 		rootG.setPadding(new Insets(20));
 		rootG.setSpacing(10);
-		System.out.println("buildGUI() Complete");
 	}
 
 	private void buildAxes() {
+		// create color data
 		final PhongMaterial redMaterial = new PhongMaterial();
 		redMaterial.setDiffuseColor(Color.DARKRED);
 		redMaterial.setSpecularColor(Color.RED);
@@ -699,6 +837,7 @@ public class DiamondApp extends Application {
 		blueMaterial.setDiffuseColor(Color.DARKBLUE);
 		blueMaterial.setSpecularColor(Color.BLUE);
 
+		// create shape
 		final Box xAxis = new Box(AXIS_LENGTH, 1, 1);
 		final Box yAxis = new Box(1, AXIS_LENGTH, 1);
 		final Box zAxis = new Box(1, 1, AXIS_LENGTH);
@@ -718,16 +857,18 @@ public class DiamondApp extends Application {
 		yAxis.setMaterial(greenMaterial);
 		zAxis.setMaterial(blueMaterial);
 
+		// clear data
 		axisGroup.getChildren().clear();
+		// add children to parents
 		axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
 		axisGroup.setVisible(true);
 		world.getChildren().addAll(axisGroup);
-		System.out.println("buildAxes() Complete");
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws IOException, InvocationTargetException {
 
+		// create scene and sub scenes
 		SubScene sceneR = new SubScene(rootR, WINDOW_WIDTH, WINDOW_HEIGTH, true, SceneAntialiasing.BALANCED);
 		sceneR.setFill(Color.WHITE);
 

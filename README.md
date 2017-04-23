@@ -1,6 +1,8 @@
 # DiamondTiling3DPrint
 Pouder School District PWR Internship Project: 3D printing Diamond Tiling Software 
-
+To 3D Print:
+    Go to this link to get STL file:
+    https://drive.google.com/file/d/0B7KV4qpJFc2COVFPcmNrUTlnbDg/view?usp=sharing
 To run:
 
     1.Make sure you have the Java JRE installed. Found here http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
